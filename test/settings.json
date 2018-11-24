@@ -1,6 +1,6 @@
 {
   "mongoConfig": {
     "serverUrl": "mongodb://localhost:27017/",
-    "database": "Rohan_Menon_Lab4"
+    "database": "Pendikan"
   }
 }

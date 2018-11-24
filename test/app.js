@@ -5,6 +5,8 @@ const exphbs = require("express-handlebars");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const static = express.static(__dirname + "/public");
+const UserFunctions = require("./dbFunctions");
+const connection = require("./mongoConnection");
 app.use("/public", static);
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -27,6 +29,12 @@ let users = [
 				"hashedPassword" : "$2a$16$7JKSiEmoP3GNDSalogqgPu0sUbwder7CAN/5wnvCWe6xCKAKwlTD."
 		}
 ];
+
+async function getAll(){
+	console.log("\n\nGetting All Users: \n\n")
+	let usersFromDB = await UserFunctions.getAllUsers();
+	console.log(usersFromDB);
+}
 
 app.use("/dashboard", function(req, res, next) {
   // If we had a user system, we could check to see if we could access /admin
@@ -57,6 +65,8 @@ app.get("/",async(req,res)=>{
 		}
 	else
 	{
+	//console.log(usersFromDB);
+	getAll();
 	res.render(__dirname + "/homepage");
 	}
 })
@@ -107,6 +117,22 @@ app.post("/login",async (req,res)=>{
 				return;
 			}
  
+})
+
+app.get("/signup",(req,res)=>{
+	res.render(__dirname + "/signup");
+})
+
+app.post("/signup",async(req,res)=>{
+	try {
+		console.log("\nEntered Information: ", req.body);
+		let createdUser = await UserFunctions.createUser(req.body.username,req.body.password, req.body.email);
+		console.log(createdUser);
+		res.send("Success")
+	} catch (error) {
+		console.log(error);
+		res.send(error)
+	}
 })
 
 app.get("/dashboard",async(req,res)=>{
