@@ -1,0 +1,40 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		Dashboard
+	</title>
+</head>
+<body>
+	<h1>
+        <div class= "title">Dashboard
+        </div>
+    </h1>
+    <br><br>
+	<main>
+        <div class = "courseBox">
+        <p>
+            <br>Name of the Course : {{ nameOfTheCourse }}
+            <br>Profession: {{ profession }}
+        </p>
+        </div>
+	</main>
+    <input type = "button" value="Add a Course">
+    <input type = "button" value="Become a Tutor">
+    <br><br>
+    <div class = "logoutButton">
+                <form action="/logout" method="get">
+                <input type="submit" value="Logout">
+                </form>
+            </div>
+    {{#if hasErrors}}
+        <ul class="error-list">
+        {{#each errors}}
+            <li class= "error">
+                {{ this }}
+            </li>
+        {{/each}}
+        </ul>
+  {{/if}}
+</body>
+</html>

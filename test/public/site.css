@@ -1,0 +1,41 @@
+body {
+    background-color: lightblue;
+}
+
+h1 {
+    color: navy;
+    margin-left: 20px;
+}
+
+p {
+   font-weight: bold;
+}
+
+div.courseBox {
+	width: 300px;
+    padding: 25px;
+    margin: 25px;
+	outline: 4px solid red;
+	outline-offset: 15px;
+}
+
+div.title{
+	position: absolute;
+	left: 50%;
+}
+
+div.logoutButton {
+
+ }
+
+.success{
+	color: #28a745;
+}
+
+.failure{
+	color: #dc3545;
+}
+
+.error{
+	color: #dc3545;
+}

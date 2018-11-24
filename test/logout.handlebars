@@ -1,0 +1,28 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		Logout Page
+	</title>
+</head>
+<body>
+	<h1>
+	Thank you for using The Pendikan
+	</h1>
+	<main>
+		<p>
+			User is now logged out.
+            <a href= "/" method= "get ">Click here to go to login page</a>
+		</p>
+	</main>
+    {{#if hasErrors}}
+        <ul class="error-list">
+        {{#each errors}}
+            <li class= "error">
+                {{ this }}
+            </li>
+        {{/each}}
+        </ul>
+  {{/if}}
+</body>
+</html>

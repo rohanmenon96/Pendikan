@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>The Palindrome Results!</title>
+    <link rel="stylesheet" type="text/css" href="../public/site.css">
+</head>
+<body>
+    <h1>
+        The Palindrome Results!
+    </h1>
+    <main>
+    {{#if isPalindrome}}
+        <p class="success">{{ text_to_test }}</p>
+        <p>The above string is a palindrome</p>
+    {{ else }}
+        <p class="failure">{{  text_to_test }}</p>
+        <p>The above string is not a palindrome</p>
+    {{/if}}
+        <a href= "/homepage.html">Go Back to main page</a>
+    </main>
+</body>
+</html>
