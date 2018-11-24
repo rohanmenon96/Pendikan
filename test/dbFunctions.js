@@ -1,6 +1,9 @@
 const mongoCollections = require("./mongoCollection");
 const Users = mongoCollections.Users;
 const uuidv4 = require('uuid/v4');
+const bcrypt = require("bcrypt");
+const saltRounds = 16;
+
 module.exports = {
 
 	getUser : async function(id) {
@@ -13,7 +16,7 @@ module.exports = {
 	    return user;
   		},
 
-	createUser : async function(username, password,email)
+	createUser : async function(username, password,email,course)
 		{
 			if (!username) throw "You must provide a Username";
 
@@ -21,12 +24,15 @@ module.exports = {
 		      throw "You must provide a password";
 
 		    const UserCollection = await Users();
+			const hashedPassword = await bcrypt.hash(password, saltRounds)
 
 		    let newUser = {
 		        _id: uuidv4(),
 			    username: username,
 				password: password,
+				hashedPassword: hashedPassword,
 				email: email,
+				courses: [course],
 			    tutor: false,
 			   	tutorAt: []
 		    };

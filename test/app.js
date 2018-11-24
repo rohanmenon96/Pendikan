@@ -14,25 +14,11 @@ app.use(bodyParser.urlencoded());
 app.engine("handlebars", exphbs());
 app.set("view engine", "handlebars");
 
-let users = [
-		{
-				"userId" : "1",  // use MongoDB unique ID
-
-				"username" : "masterdetective123",
-
-				"nameOfTheCourse" : "CS 546",
-
-				"profession" : "Student",
-
-				"password" : "elementarymydearwatson",
-
-				"hashedPassword" : "$2a$16$7JKSiEmoP3GNDSalogqgPu0sUbwder7CAN/5wnvCWe6xCKAKwlTD."
-		}
-];
-
 async function getAll(){
 	console.log("\n\nGetting All Users: \n\n")
-	let usersFromDB = await UserFunctions.getAllUsers();
+	const usersFromDB = await UserFunctions.getAllUsers();
+	// let hashVal = await bcrypt.compare("menon","$2b$16$wNqA/VRvHcQobflglhqxOeTz26ppJUZ07NJgBs9F7PAcpEf1UHHQW")
+	// console.log(hashVal);
 	console.log(usersFromDB);
 }
 
@@ -87,17 +73,20 @@ app.post("/login",async (req,res)=>{
 
 	let hashedPass ; 
 	let userId ;
+	console.log("Going inside loop")
+	const usersFromDB = await UserFunctions.getAllUsers();
 
-	for(let i=0; i<users.length; i++)
+	for(let i=0; i<usersFromDB.length; i++)
 		{
-			if(req.body.username==users[i].username)
+			if(req.body.username==usersFromDB[i].username)
 				{
-					hashedPass = users[i].hashedPassword;
-					userId = users[i].userId;
+					hashedPass = usersFromDB[i].hashedPassword;
+					userId = usersFromDB[i]._id;
 				}
 		}
-
-	console.log(hashedPass);
+	
+	
+	console.log("Fetched From DB: ",hashedPass);
 
 	let comparedVal = await bcrypt.compare(req.body.password, hashedPass);
 	console.log("comparedVal", comparedVal)
@@ -126,9 +115,9 @@ app.get("/signup",(req,res)=>{
 app.post("/signup",async(req,res)=>{
 	try {
 		console.log("\nEntered Information: ", req.body);
-		let createdUser = await UserFunctions.createUser(req.body.username,req.body.password, req.body.email);
+		let createdUser = await UserFunctions.createUser(req.body.username,req.body.password, req.body.email,req.body.course);
 		console.log(createdUser);
-		res.send("Success")
+		res.redirect("/");
 	} catch (error) {
 		console.log(error);
 		res.send(error)
@@ -136,13 +125,12 @@ app.post("/signup",async(req,res)=>{
 })
 
 app.get("/dashboard",async(req,res)=>{
-				for(let i=0; i<users.length; i++)
-					{
-						if(req.cookies.AuthCookie == users[i].userId)
-							{
-								res.render(__dirname + "/data", {"nameOfTheCourse":users[i].nameOfTheCourse, "profession": users[i].profession});
-							}
-					}
+	console.log("Inside the route /dashboard")
+	const usersFromDB = await UserFunctions.getAllUsers();
+	console.log(req.cookies.AuthCookie);
+	let currentUser  = await UserFunctions.getUser(req.cookies.AuthCookie)
+	console.log("Fetched User",currentUser);
+	res.render(__dirname + "/data", {"nameOfTheCourse":currentUser.courses[0], "profession": currentUser.email});
 	})
 
 
