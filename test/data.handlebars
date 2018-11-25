@@ -12,21 +12,44 @@
     </h1>
     <br><br>
 	<main>
-        <div class = "courseBox">
-        <p>
-            <br>Name of the Course : {{ nameOfTheCourse }}
-            <br>Profession: {{ profession }}
-        </p>
-        <form action="/addARequest" method="get">
-                <input type="submit" value="Add Request">
-                </form>
-        </div>
-	</main>
+    {{!-- Course Loading --}}
+        {{#each courses}}
+             <div class = "courseBox">
+                <p>
+                    <br>Name of the Course : {{ this }}
+                    <br>Enrolled As: Student
+                </p>
+                <form action="/addARequest" method="get">
+                        <input type="submit" value="Add Request">
+                        </form>
+                </div>
+        {{/each}}
+
     <form action="/viewActiveRequests" method="get">
-                <input type="submit" value="View Active Requests">
+                <input type="submit" value="View Student Requests">
                 </form>
     <input type = "button" value="Add a Course">
-    {{!-- <input type = "button" value="Become a Tutor"> --}}
+
+    {{!-- Tutor Loading --}}
+    {{#if isTutor}}
+        
+        {{#each tutorAt}}
+                <div class = "courseBox">
+                <p>
+                    <br>Name of the Course : {{ this }}
+                    <br>Enrolled As: Tutor
+                </p>
+                {{!-- Change this action --}}
+                <form action="/" method="get"> 
+                        <input type="submit" value="View Tutor Requests">
+                        </form>
+                </div>
+        {{/each}}
+      {{/if}}
+
+
+	</main>
+
     <form action="/becomeATutor" method="get">
     <input type="submit" value="Become A Tutor">
     </form>

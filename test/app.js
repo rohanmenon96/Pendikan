@@ -88,7 +88,7 @@ app.post("/login",async (req,res)=>{
 			{
 				let hasErrors = true;
 				let errors = [];
-				errors.push("username/Password does not match");
+				errors.push("username/password does not match");
 				res.status(403).render(__dirname + "/homepage", {"hasErrors":hasErrors, "errors":errors});
 				return;
 			}
@@ -117,7 +117,18 @@ app.get("/dashboard",async(req,res)=>{
 	console.log(req.cookies.AuthCookie);
 	let currentUser  = await UserFunctions.getUser(req.cookies.AuthCookie)
 	console.log("Fetched User",currentUser);
-	res.render(__dirname + "/data", {"nameOfTheCourse":currentUser.courses[0], "profession": currentUser.email});
+	console.log("\nCurrent User: \n",currentUser)
+	//let testObj = {"nameOfTheCourse":currentUser.courses[0], "profession": currentUser.email};
+
+	let newObj = {
+		"isTutor": currentUser.tutor,
+		"courses": currentUser.courses,
+		"tutorAt": currentUser.tutorAt
+	}
+
+	console.log("\nnewObj Val: \n", newObj)
+
+	res.render(__dirname + "/data", newObj);
 	})
 
 app.get("/becomeATutor",async(req,res)=>{
@@ -138,12 +149,15 @@ app.get("/logout",async(req,res)=>{
 })
 
 app.get("/",async(req,res)=>{
+	console.log("\nInside the base route")
 	if(req.cookies.AuthCookie)
 		{
+			console.log("Cookie found")
 			res.redirect("/dashboard");
 		}
 	else
 	{
+	console.log("No Cookie found")
 	//console.log(usersFromDB);
 	//getAll();
 	res.render(__dirname + "/homepage");
@@ -151,6 +165,7 @@ app.get("/",async(req,res)=>{
 })
 
 app.get("/addARequest",async(req,res)=>{
+	console.log("\n\n\nCOMING INSIDE ADD A REQUEST\n\n\n",req.body)
 	res.render(__dirname+"/addRequest")
 })
 
@@ -176,6 +191,7 @@ app.get("/viewActiveRequests",async(req,res)=>{
 })
 
 app.get("*",async(req,res)=>{
+	console.log("\nInside the * route\n")
 	if(req.cookies.AuthCookie)
 		{
 			res.redirect("/dashboard");
@@ -187,7 +203,7 @@ app.get("*",async(req,res)=>{
 })
 
 app.listen(3000, () => {
-  console.log("We've now got a server!");
+  console.log("Pendikan is now live!");
   console.log("Your routes will be running on http://localhost:3000");
    if (process && process.send) process.send({done: true}); 
 });

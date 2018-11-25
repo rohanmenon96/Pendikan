@@ -15,7 +15,7 @@ div.courseBox {
 	width: 300px;
     padding: 25px;
     margin: 25px;
-	outline: 4px solid red;
+	outline: 4px solid darkblue;
 	outline-offset: 15px;
 }
 
