@@ -40,9 +40,10 @@
                     <br>Enrolled As: Tutor
                 </p>
                 {{!-- Change this action --}}
-                <form action="/" method="get"> 
+                <form action="/viewTutorRequests" method="post">
+                        <input type="hidden" name="course" value={{this}}>
                         <input type="submit" value="View Tutor Requests">
-                        </form>
+                </form>
                 </div>
         {{/each}}
       {{/if}}

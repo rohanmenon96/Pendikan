@@ -1,0 +1,28 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		Active Tutor Requests Page
+	</title>
+</head>
+<body>
+	<h1>
+	Active Tutor Requests
+	</h1>
+	<main>
+		<p>
+			Active Requests:
+		</p>
+	</main>
+        {{#each requests}}
+            <li><br>
+                Topic: {{ topic }}<br>
+				Location: {{ location }}<br>
+				Time: {{ time }}<br>
+				Posted at: {{ postedAt }}
+            </li>
+        {{/each}}
+  <br><br>	
+  <a href= "/dashboard" method= "get">Go Back to Dashboard</a>
+</body>
+</html>

@@ -71,6 +71,13 @@ module.exports = {
 		return await RequestCollection.find({requestBy : userID}).toArray();
 	},
 
+	getActiveRequests: async function(courseName){
+		const RequestCollection = await Requests();
+		let answer = await RequestCollection.find({$and: [{course: courseName},{status: "OPEN"}]}).toArray();
+		console.log("\n\nReturning Requests: \n\n", answer);
+		return answer;
+	},
+
 	becomeTutor : async function(userID,course) {
 
 		    if (!userID) throw "You must provide an user id to search for";

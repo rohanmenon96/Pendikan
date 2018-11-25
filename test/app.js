@@ -114,9 +114,9 @@ app.post("/signup",async(req,res)=>{
 app.get("/dashboard",async(req,res)=>{
 	console.log("Inside the route /dashboard")
 	const usersFromDB = await UserFunctions.getAllUsers();
-	console.log(req.cookies.AuthCookie);
+	console.log("\n\nAuthCookie Value : ",req.cookies.AuthCookie);
 	let currentUser  = await UserFunctions.getUser(req.cookies.AuthCookie)
-	console.log("Fetched User",currentUser);
+	// console.log("Fetched User",currentUser);
 	console.log("\nCurrent User: \n",currentUser)
 	//let testObj = {"nameOfTheCourse":currentUser.courses[0], "profession": currentUser.email};
 
@@ -126,7 +126,7 @@ app.get("/dashboard",async(req,res)=>{
 		"tutorAt": currentUser.tutorAt
 	}
 
-	console.log("\nnewObj Val: \n", newObj)
+	console.log("\n\nDashboard Object Values: \n", newObj)
 
 	res.render(__dirname + "/data", newObj);
 	})
@@ -142,6 +142,17 @@ app.post("/becomeATutor",async(req,res)=>{
 	res.redirect("/");
 })
 
+app.post("/viewTutorRequests",async(req,res)=>{
+	console.log("\n\n\nComing inside view tutor requests with the following data: \n\n", req.body)
+	let activeRequests = await UserFunctions.getActiveRequests(req.body.course);
+	console.log("\n\nComing back to the route with data: \n\n", activeRequests);
+	let requests = [];
+	for(let i=0; i<activeRequests.length; i++)
+		{
+			requests[i] = activeRequests[i];
+		}
+	res.render(__dirname + "/TutorRequests",{"requests": requests});
+})
 
 app.get("/logout",async(req,res)=>{
 	res.clearCookie("AuthCookie");
@@ -173,6 +184,8 @@ app.post("/addARequest",async(req,res)=>{
 	req.body.requestBy = req.cookies.AuthCookie;
 	console.log("Coming inside post addARequest with data: \n",req.body);
 	req.body.repliedBy = [];
+	req.body.postedAt = Date();
+	req.body.status = "OPEN";
 	let createdReq = await UserFunctions.createReq(req.body);
 	console.log("createdReq (1 for Success/0 for failure): ", createdReq);
 	res.redirect("/dashboard")
