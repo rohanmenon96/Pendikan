@@ -1,0 +1,28 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		Active Requests Page
+	</title>
+</head>
+<body>
+	<h1>
+	Your Active Requests
+	</h1>
+	<main>
+		<p>
+			Active Requests:
+		</p>
+	</main>
+    {{#if hasRequests}}
+        <ul>
+        {{#each requests}}
+            <li>
+                {{ topic }} - <a href = "/dashboard" method= "get"> View Request</a>
+            </li>
+        {{/each}}
+        </ul>
+  {{/if}}
+  <a href= "/dashboard" method= "get">Go Back to Dashboard</a>
+</body>
+</html>

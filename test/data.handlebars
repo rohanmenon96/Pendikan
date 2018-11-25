@@ -17,10 +17,19 @@
             <br>Name of the Course : {{ nameOfTheCourse }}
             <br>Profession: {{ profession }}
         </p>
+        <form action="/addARequest" method="get">
+                <input type="submit" value="Add Request">
+                </form>
         </div>
 	</main>
+    <form action="/viewActiveRequests" method="get">
+                <input type="submit" value="View Active Requests">
+                </form>
     <input type = "button" value="Add a Course">
-    <input type = "button" value="Become a Tutor">
+    {{!-- <input type = "button" value="Become a Tutor"> --}}
+    <form action="/becomeATutor" method="get">
+    <input type="submit" value="Become A Tutor">
+    </form>
     <br><br>
     <div class = "logoutButton">
                 <form action="/logout" method="get">
@@ -36,5 +45,6 @@
         {{/each}}
         </ul>
   {{/if}}
+  
 </body>
 </html>

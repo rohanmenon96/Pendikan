@@ -1,10 +1,19 @@
 const mongoCollections = require("./mongoCollection");
 const Users = mongoCollections.Users;
+const Requests = mongoCollections.Requests;
 const uuidv4 = require('uuid/v4');
 const bcrypt = require("bcrypt");
 const saltRounds = 16;
 
 module.exports = {
+
+	createReq: async function(reqObject){
+		reqObject._id = uuidv4();
+		console.log("Coming inside createReq with data: \n", reqObject);
+		let RequestCollection = await Requests();
+		let insertInfo = await RequestCollection.insertOne(reqObject);
+		return insertInfo.insertedCount;
+	},
 
 	getUser : async function(id) {
 	    if (!id) throw "You must provide an id to search for";
@@ -55,31 +64,38 @@ module.exports = {
 		    return users;
 
 
+		},
+
+	getMyRequests : async function(userID){
+		const RequestCollection = await Requests();
+		return await RequestCollection.find({requestBy : userID}).toArray();
+	},
+
+	becomeTutor : async function(userID,course) {
+
+		    if (!userID) throw "You must provide an user id to search for";
+
+		    const UserCollection = await Users();
+
+			const user = await this.getUser(userID);
+			let courseArray = user.tutorAt;
+			courseArray.push(course);
+
+		  	// let updatedTask = {
+		    //     //_id: taskId,
+			//     title: task.title,
+			//     description: task.description,
+			//     completed: true,
+			//     completedAt: true
+		    // };
+
+		    const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "tutor" : true, "tutorAt": courseArray}});
+		    if (updateInfo.modifiedCount === 0) {
+		      throw "could not update task successfully";
+		    }
+
+		    return await this.getUser(userID);
 		}
-
-	// completeTask : async function(taskId) {
-
-	// 	    if (!taskId) throw "You must provide an task id to search for";
-
-	// 	    const UserCollection = await Users();
-
-	// 	    const task = await this.getUser(taskId);
-
-	// 	  	let updatedTask = {
-	// 	        //_id: taskId,
-	// 		    title: task.title,
-	// 		    description: task.description,
-	// 		    completed: true,
-	// 		    completedAt: true
-	// 	    };
-
-	// 	    const updateInfo = await UserCollection.updateOne({ _id: taskId }, updatedTask);
-	// 	    if (updateInfo.modifiedCount === 0) {
-	// 	      throw "could not update task successfully";
-	// 	    }
-
-	// 	    return await this.getUser(taskId);
-	// 	},
 
 	// removeTask : async function(id) {
 	// 	    if (!id) throw "You must provide an id to search for to remove";

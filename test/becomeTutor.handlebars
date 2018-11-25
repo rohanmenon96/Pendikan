@@ -1,0 +1,40 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		Become A Tutor Page
+	</title>
+</head>
+<body>
+	<h1>
+	Become A Tutor
+	</h1>
+	<main>
+		<p>
+			User will use this page to become a Tutor.
+		</p>
+        <div>
+		<form id= "tutor-form" action="/becomeATutor" method="POST">
+            Enter Course for which you want to tutor:
+            <select name= "course">
+            <option value="CS546">CS546 - Web Programming</option>
+            <option value="CS511">CS511 - Concurrent Programming</option>
+            <option value="CS570">CS570 - Intro to Algorithms</option>
+            <option value="CS554">CS554 - Web Programming II</option>
+            </select>
+            <br>
+			<button type="submit">Become Tutor</button>
+		</form>
+        </div>
+	</main>
+    {{#if hasErrors}}
+        <ul class="error-list">
+        {{#each errors}}
+            <li class= "error">
+                {{ this }}
+            </li>
+        {{/each}}
+        </ul>
+  {{/if}}
+</body>
+</html>

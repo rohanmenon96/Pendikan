@@ -14,13 +14,13 @@ app.use(bodyParser.urlencoded());
 app.engine("handlebars", exphbs());
 app.set("view engine", "handlebars");
 
-async function getAll(){
-	console.log("\n\nGetting All Users: \n\n")
-	const usersFromDB = await UserFunctions.getAllUsers();
-	// let hashVal = await bcrypt.compare("menon","$2b$16$wNqA/VRvHcQobflglhqxOeTz26ppJUZ07NJgBs9F7PAcpEf1UHHQW")
-	// console.log(hashVal);
-	console.log(usersFromDB);
-}
+// async function getAll(){
+// 	console.log("\n\nGetting All Users: \n\n")
+// 	const usersFromDB = await UserFunctions.getAllUsers();
+// 	// let hashVal = await bcrypt.compare("menon","$2b$16$wNqA/VRvHcQobflglhqxOeTz26ppJUZ07NJgBs9F7PAcpEf1UHHQW")
+// 	// console.log(hashVal);
+// 	console.log(usersFromDB);
+// }
 
 app.use("/dashboard", function(req, res, next) {
   // If we had a user system, we could check to see if we could access /admin
@@ -43,19 +43,6 @@ app.use("/dashboard", function(req, res, next) {
 			}
 });
 
-
-app.get("/",async(req,res)=>{
-	if(req.cookies.AuthCookie)
-		{
-			res.redirect("/dashboard");
-		}
-	else
-	{
-	//console.log(usersFromDB);
-	getAll();
-	res.render(__dirname + "/homepage");
-	}
-})
 
 app.post("/login",async (req,res)=>{
 
@@ -133,10 +120,59 @@ app.get("/dashboard",async(req,res)=>{
 	res.render(__dirname + "/data", {"nameOfTheCourse":currentUser.courses[0], "profession": currentUser.email});
 	})
 
+app.get("/becomeATutor",async(req,res)=>{
+	res.render(__dirname+ "/becomeTutor");
+	})
+
+app.post("/becomeATutor",async(req,res)=>{
+	console.log("Coming inside /becomeATutor with data\n",req.body)
+	let user = await UserFunctions.becomeTutor(req.cookies.AuthCookie,req.body.course)
+	console.log(user);
+	res.redirect("/");
+})
+
 
 app.get("/logout",async(req,res)=>{
 	res.clearCookie("AuthCookie");
 	res.render(__dirname + "/logout");
+})
+
+app.get("/",async(req,res)=>{
+	if(req.cookies.AuthCookie)
+		{
+			res.redirect("/dashboard");
+		}
+	else
+	{
+	//console.log(usersFromDB);
+	//getAll();
+	res.render(__dirname + "/homepage");
+	}
+})
+
+app.get("/addARequest",async(req,res)=>{
+	res.render(__dirname+"/addRequest")
+})
+
+app.post("/addARequest",async(req,res)=>{
+	req.body.requestBy = req.cookies.AuthCookie;
+	console.log("Coming inside post addARequest with data: \n",req.body);
+	req.body.repliedBy = [];
+	let createdReq = await UserFunctions.createReq(req.body);
+	console.log("createdReq (1 for Success/0 for failure): ", createdReq);
+	res.redirect("/dashboard")
+})
+
+app.get("/viewActiveRequests",async(req,res)=>{
+	let myRequests = await UserFunctions.getMyRequests(req.cookies.AuthCookie);
+	console.log("\n\n\nMy Active Requests: ", myRequests, "\n\n\n");
+	let hasRequests = true;
+	let requests = [];
+	for(let i=0; i<myRequests.length; i++)
+		{
+			requests.push(myRequests[i]);
+		}
+	res.render(__dirname + "/ActiveRequests", {"hasRequests":hasRequests, "requests":requests});			
 })
 
 app.get("*",async(req,res)=>{
@@ -153,5 +189,5 @@ app.get("*",async(req,res)=>{
 app.listen(3000, () => {
   console.log("We've now got a server!");
   console.log("Your routes will be running on http://localhost:3000");
-   if (process && process.send) process.send({done: true}); // ADD THIS LINE
+   if (process && process.send) process.send({done: true}); 
 });

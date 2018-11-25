@@ -1,0 +1,46 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		Add A Request Page
+	</title>
+</head>
+<body>
+	<h1>
+	Add A Request
+	</h1>
+	<main>
+		<p>
+			User will use this page to create a new Tutor request.
+		</p>
+        <div>
+		<form id= "request-form" action="/addARequest" method="POST">
+            Enter Topic
+            <input type="text" name="topic"><br>
+            Enter Description
+            <input type="text" name="description"><br>
+            Enter Date and Time
+            <input type="datetime-local" name="time"><br>
+            Enter Location
+            <select name= "location">
+            <option value="Library">Library</option>
+            <option value="Howe Center">Howe Center</option>
+            <option value="Babio">Babio</option>
+            <option value="NorthBuilding">North Building</option>
+            </select>
+            <br>
+			<button type="submit">Create Request</button>
+		</form>
+        </div>
+	</main>
+    {{#if hasErrors}}
+        <ul class="error-list">
+        {{#each errors}}
+            <li class= "error">
+                {{ this }}
+            </li>
+        {{/each}}
+        </ul>
+  {{/if}}
+</body>
+</html>
