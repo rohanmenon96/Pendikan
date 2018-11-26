@@ -111,6 +111,17 @@ app.post("/signup",async(req,res)=>{
 	}
 })
 
+app.get("/addCourseForm",async(req,res)=>{
+	res.render(__dirname + "/addACourse");
+})
+
+app.post("/addACourse",async(req,res)=>{
+	console.log("\n\nComing inside the POST route with data ", req.body)
+	let user = await UserFunctions.addCourse(req.cookies.AuthCookie,req.body.course)
+	console.log("\n\nAfter Updating : ", user);
+	res.redirect("/");
+})
+
 app.get("/dashboard",async(req,res)=>{
 	console.log("Inside the route /dashboard")
 	const usersFromDB = await UserFunctions.getAllUsers();

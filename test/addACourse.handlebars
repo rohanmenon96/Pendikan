@@ -2,26 +2,20 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="public/site.css">
 	<title>
-		Signup Page
+		Add a Course Page
 	</title>
 </head>
 <body>
 	<h1>
-	The Pendikan
+	Add A Course
 	</h1>
 	<main>
 		<p>
-			User will use this page to create a new User Id.
+			User will use this page to add a course.
 		</p>
         <div>
-		<form id= "signup-form" action="/signup" method="POST">
-            Enter new username
-            <input type="text" name="username" required><br>
-            Enter new password
-            <input type="password" name="password" required><br>
-            Enter your college email address
-            <input type="email" name="email" required><br>
-            Enter Atleast One Course:
+		<form id= "addCourse-form" action="/addACourse" method="POST">
+            Enter Course you want to add:
             <select name= "course">
             <option value="CS546">CS546 - Web Programming</option>
             <option value="CS511">CS511 - Concurrent Programming</option>
@@ -29,7 +23,8 @@
             <option value="CS554">CS554 - Web Programming II</option>
             </select>
             <br>
-			<button type="submit">Sign Up</button>
+            <br>
+			<button type="submit">Add</button>
 		</form>
         </div>
 	</main>

@@ -78,6 +78,18 @@ module.exports = {
 		return answer;
 	},
 
+	addCourse: async function(userID,courseName){
+		const UserCollection = await Users();
+		const user = await this.getUser(userID);
+		let courseArray = user.courses;
+		courseArray.push(courseName);
+		const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "courses": courseArray}});
+		if (updateInfo.modifiedCount === 0) {
+			throw "could not update task successfully";
+		  }
+		return await this.getUser(userID);
+	},
+
 	becomeTutor : async function(userID,course) {
 
 		    if (!userID) throw "You must provide an user id to search for";

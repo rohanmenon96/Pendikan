@@ -26,9 +26,11 @@
         {{/each}}
 
     <form action="/viewActiveRequests" method="get">
-                <input type="submit" value="View Student Requests">
+                <input type="submit" value="View My Student Requests">
                 </form>
-    <input type = "button" value="Add a Course">
+    <form action="/addCourseForm" method="get">
+                <input type="submit" value="Add Course">
+                </form>
 
     {{!-- Tutor Loading --}}
     {{#if isTutor}}
