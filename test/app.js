@@ -147,6 +147,16 @@ app.post("/addACourse",async(req,res)=>{
 	res.redirect("/");
 })
 
+app.get("/removeCourseForm", async (req, res) => {
+	res.render(__dirname + "/removeACourse");
+})
+
+app.post("/removeCourse", async (req, res) => {
+	let user = await UserFunctions.removeCourse(req.cookies.AuthCookie, req.body.course)
+	console.log("\n\nAfter Updating : ", user);
+	res.redirect("/");
+})
+
 app.get("/dashboard",async(req,res)=>{
 	console.log("Inside the route /dashboard")
 	const usersFromDB = await UserFunctions.getAllUsers();
