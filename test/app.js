@@ -117,6 +117,11 @@ app.post("/signup",async(req,res)=>{
 				res.status(400).render(__dirname + "/signup", { "hasErrors": hasErrors, "errors": errors });
 				return;
 			}
+			if(req.body.email == usersFromDB[i].email) {
+				errors.push("Email already exists..!!");
+				res.status(400).render(__dirname + "/signup", { "hasErrors": hasErrors, "errors": errors });
+				return;
+			}
 		}
 		let createdUser = await UserFunctions.createUser(req.body.username, req.body.password, req.body.email, req.body.course);
 		//console.log(createdUser);
