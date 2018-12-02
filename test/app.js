@@ -62,21 +62,22 @@ app.post("/login",async (req,res)=>{
 	let userId ;
 	console.log("Going inside loop")
 	const usersFromDB = await UserFunctions.getAllUsers();
-
-	for(let i=0; i<usersFromDB.length; i++)
-		{
-			if(req.body.username==usersFromDB[i].username) {
-				hashedPass = usersFromDB[i].hashedPassword;
-				userId = usersFromDB[i]._id;
-				break;
-			} else {
-				let hasErrors = true;
-				let errors = [];
-				errors.push("User does not exists..!!");
-				res.status(400).render(__dirname + "/homepage", { "hasErrors": hasErrors, "errors": errors });
-				return;
-			}
+	let isUser = false;
+	for (let i = 0; i < usersFromDB.length; i++) {
+		console.log(usersFromDB[i].username)
+		if (req.body.username == usersFromDB[i].username) {
+			isUser = true;
+			hashedPass = usersFromDB[i].hashedPassword;
+			userId = usersFromDB[i]._id;
 		}
+	}
+	if(!isUser) {
+		let hasErrors = true;
+		let errors = [];
+		errors.push("User does not exists..!!\nPlease Sign Up");
+		res.status(400).render(__dirname + "/homepage", { "hasErrors": hasErrors, "errors": errors });
+		return;
+	}
 	
 	
 	console.log("Fetched From DB: ",hashedPass);
