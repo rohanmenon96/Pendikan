@@ -2,32 +2,31 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="public/site.css">
 	<title>
-		Active Requests Page
+		Accepted Requests Page
 	</title>
 </head>
 <body>
 	<h1>
-	Your Active Requests
+	My Accepted Requests
 	</h1>
 	<main>
 		<p>
-			Active Requests:
+			Accepted Requests:
 		</p>
 	</main>
-    {{#if hasRequests}}
+
         <ul>
-        {{#each requests}}
+        {{#each AcceptedRequests}}
             <li>
 				Course : {{ course }}<br>
                 Topic : {{ topic }}<br> 
 				Preferred time of meet: {{ time }}<br>
 				Preferred location of meet: {{ location }}<br>
-				Status: {{ status }}<br>
-				Accepted By: {{ repliedBy.length }} Tutors<br><br>
+				Status: {{ status }}<br><br>
             </li>
         {{/each}}
         </ul>
-  {{/if}}
+
   <a href= "/dashboard" method= "get">Go Back to Dashboard</a>
 </body>
 </html>

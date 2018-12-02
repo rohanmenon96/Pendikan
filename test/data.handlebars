@@ -11,7 +11,7 @@
         </div>
     </h1>
     <br><br>
-	<main>
+    
     {{!-- Course Loading --}}
         {{#each courses}}
              <div class = "courseBox">
@@ -48,10 +48,12 @@
                 </form>
                 </div>
         {{/each}}
+
+        <form action="/myAcceptedRequests" method="post">
+                <input type="submit" value="My Accepted Requests">
+                </form>
       {{/if}}
 
-
-	</main>
 
     <form action="/becomeATutor" method="get">
     <input type="submit" value="Become A Tutor">

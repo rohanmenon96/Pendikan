@@ -210,8 +210,28 @@ app.get("/viewActiveRequests",async(req,res)=>{
 	for(let i=0; i<myRequests.length; i++)
 		{
 			requests.push(myRequests[i]);
+			console.log("\n\n repliedBy Length: ", myRequests[i].repliedBy.length);
 		}
 	res.render(__dirname + "/ActiveRequests", {"hasRequests":hasRequests, "requests":requests});			
+})
+
+app.post("/myAcceptedRequests",async(req,res)=>{
+	let AcceptedRequests = await UserFunctions.myAcceptedRequests(req.cookies.AuthCookie);
+	console.log("AcceptedRequests: ", AcceptedRequests);
+	res.render(__dirname + "/myAcceptedRequests", {"AcceptedRequests":AcceptedRequests});
+})
+
+app.post("/tutorReply",async(req,res)=>{
+	console.log("Coming inside tutorReply with the following data: ",req.body);
+	console.log("\n\n\nRequest that has to be changed: ", req.body.id, " with value ", req.body.action)
+
+	if(req.body.action == "Accept")
+	{
+		let changedData = await UserFunctions.respondRequest(req.cookies.AuthCookie,req.body.id,req.body.action);
+		console.log("\n\nUpdated Request: ",changedData)
+	}
+	
+	res.redirect("/");
 })
 
 app.get("*",async(req,res)=>{

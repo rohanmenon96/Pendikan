@@ -66,6 +66,26 @@ module.exports = {
 
 		},
 
+	respondRequest: async function(tutorId,RequestId,action){
+
+		const RequestCollection = await Requests();
+		const UserCollection = await Users();
+
+		let data = await RequestCollection.findOne({_id: RequestId});
+
+		let newRepBy = data.repliedBy;
+		newRepBy.push(tutorId);
+		let updateInfo = await RequestCollection.updateOne({_id : RequestId},{$set: {repliedBy : newRepBy}}); 
+
+		return await RequestCollection.findOne({_id: RequestId}); 
+
+	},
+	
+	myAcceptedRequests: async function(tutorID){
+		const RequestCollection = await Requests();
+		return await RequestCollection.find({repliedBy: tutorID}).toArray();
+	},
+
 	getMyRequests : async function(userID){
 		const RequestCollection = await Requests();
 		return await RequestCollection.find({requestBy : userID}).toArray();

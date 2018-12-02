@@ -14,14 +14,22 @@
 			Active Requests:
 		</p>
 	</main>
+		<ul>
         {{#each requests}}
-            <li><br>
+            <li>
                 Topic: {{ topic }}<br>
+				Description: {{ description }}<br>
 				Location: {{ location }}<br>
 				Time: {{ time }}<br>
 				Posted at: {{ postedAt }}
+				<form action="/tutorReply" method="post">
+				<input type="submit" name="action" value="Accept" />
+				<input type="submit" name="action" value="Reject" />
+				<input type="hidden" name="id" value = {{ _id }} >
+				</form>
             </li>
         {{/each}}
+		</ul>
   <br><br>	
   <a href= "/dashboard" method= "get">Go Back to Dashboard</a>
 </body>
