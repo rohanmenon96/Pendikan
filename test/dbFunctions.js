@@ -134,6 +134,30 @@ module.exports = {
 		    }
 
 		    return await this.getUser(userID);
+		},
+		removeCourse: async function(userID,courseName){
+			
+			const UserCollection = await Users();
+			const user = await this.getUser(userID);
+			let courseArray = user.courses;
+			let isremoved = false;
+			for(let course in courseArray){
+				console.log("eleof CoursArray"+courseArray[course]);
+				console.log(courseName);
+				if(courseArray[course] == courseName){
+					courseArray.splice(course,1);
+					isremoved = true;
+				}
+			}
+			if(!isremoved){
+					return "There is no course to remove with that name..!!";
+			}
+			console.log(courseArray);
+			const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "courses": courseArray}});
+			if (updateInfo.modifiedCount === 0) {
+				throw "could not update task successfully";
+		  	}
+			return await this.getUser(userID);
 		}
 
 	// removeTask : async function(id) {
