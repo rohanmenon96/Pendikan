@@ -119,6 +119,8 @@ app.post("/signup",async(req,res)=>{
 				return;
 			}
 			if(req.body.email == usersFromDB[i].email) {
+				let hasErrors = true;
+				let errors = [];
 				errors.push("Email already exists..!!");
 				res.status(400).render(__dirname + "/signup", { "hasErrors": hasErrors, "errors": errors });
 				return;
