@@ -1,0 +1,35 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		Remove a Course Page
+	</title>
+</head>
+<body>
+	<main>
+		<div>
+		<form id= "removeCourse" action="/removeCourse" method="POST">
+            Enter Course you want to remove:
+            <select name= "course">
+            <option value="CS546">CS546 - Web Programming</option>
+            <option value="CS511">CS511 - Concurrent Programming</option>
+            <option value="CS570">CS570 - Intro to Algorithms</option>
+            <option value="CS554">CS554 - Web Programming II</option>
+            </select>
+            <br>
+            <br>
+			<button type="submit">Remove</button>
+		</form>
+        </div>
+	</main>
+    {{#if hasErrors}}
+        <ul class="error-list">
+        {{#each errors}}
+            <li class= "error">
+                {{ this }}
+            </li>
+        {{/each}}
+        </ul>
+  {{/if}}
+</body>
+</html>
