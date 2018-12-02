@@ -98,67 +98,72 @@ module.exports = {
 		return answer;
 	},
 
-	addCourse: async function(userID,courseName){
+	addCourse: async function (userID, courseName) {
 		const UserCollection = await Users();
 		const user = await this.getUser(userID);
-		let courseArray = user.courses;
-		courseArray.push(courseName);
-		const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "courses": courseArray}});
-		if (updateInfo.modifiedCount === 0) {
-			throw "could not update task successfully";
-		  }
+		let courseArr = user.courses;
+		let isPresent = false;
+		for (let course in courseArr) {
+			if (courseArr[course] == courseName) {
+				isPresent = true;
+				break;
+			}
+		}
+		if (isPresent) {
+			return false;
+		}
+		else {
+			let courseArray = user.courses;
+			courseArray.push(courseName);
+			const updateInfo = await UserCollection.updateOne({ _id: userID }, { $set: { "courses": courseArray } });
+		}
 		return await this.getUser(userID);
 	},
 
-	becomeTutor : async function(userID,course) {
+	becomeTutor: async function (userID, courseName) {
 
-		    if (!userID) throw "You must provide an user id to search for";
+		if (!userID) throw "You must provide an user id to search for";
 
-		    const UserCollection = await Users();
-
-			const user = await this.getUser(userID);
-			let courseArray = user.tutorAt;
-			courseArray.push(course);
-
-		  	// let updatedTask = {
-		    //     //_id: taskId,
-			//     title: task.title,
-			//     description: task.description,
-			//     completed: true,
-			//     completedAt: true
-		    // };
-
-		    const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "tutor" : true, "tutorAt": courseArray}});
-		    if (updateInfo.modifiedCount === 0) {
-		      throw "could not update task successfully";
-		    }
-
-		    return await this.getUser(userID);
-		},
-		removeCourse: async function(userID,courseName){
-			
-			const UserCollection = await Users();
-			const user = await this.getUser(userID);
-			let courseArray = user.courses;
-			let isremoved = false;
-			for(let course in courseArray){
-				console.log("eleof CoursArray"+courseArray[course]);
-				console.log(courseName);
-				if(courseArray[course] == courseName){
-					courseArray.splice(course,1);
-					isremoved = true;
-				}
+		const UserCollection = await Users();
+		const user = await this.getUser(userID);
+		let courseArr = user.courses;
+		let isPresent = false;
+		for (let course in courseArr) {
+			if (courseArr[course] == courseName) {
+				isPresent = true;
+				break;
 			}
-			if(!isremoved){
-					return "There is no course to remove with that name..!!";
-			}
-			console.log(courseArray);
-			const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "courses": courseArray}});
-			if (updateInfo.modifiedCount === 0) {
-				throw "could not update task successfully";
-		  	}
-			return await this.getUser(userID);
 		}
+		if (isPresent) {
+			return false;
+		}
+		else {
+			let courseArray = user.tutorAt;
+			courseArray.push(courseName);
+			const updateInfo = await UserCollection.updateOne({ _id: userID }, { $set: { "tutor": true, "tutorAt": courseArray } });
+		}
+		return await this.getUser(userID);
+	},
+	removeCourse: async function(userID,courseName){		
+		const UserCollection = await Users();
+		const user = await this.getUser(userID);
+		let courseArray = user.courses;
+		let isremoved = false;
+		for(let course in courseArray){
+			if(courseArray[course] == courseName){
+				courseArray.splice(course,1);
+				isremoved = true;
+			}
+		}
+		if(!isremoved){
+			return "There is no course to remove with that name..!!";
+		}
+		const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "courses": courseArray}});
+		if (updateInfo.modifiedCount === 0) {
+			throw "could not update task successfully";
+	  	}
+		return await this.getUser(userID);
+	}
 
 	// removeTask : async function(id) {
 	// 	    if (!id) throw "You must provide an id to search for to remove";
