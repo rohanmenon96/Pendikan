@@ -140,11 +140,15 @@ app.get("/addCourseForm",async(req,res)=>{
 	res.render(__dirname + "/addACourse");
 })
 
-app.post("/addACourse",async(req,res)=>{
+app.post("/addACourse", async (req, res) => {
 	console.log("\n\nComing inside the POST route with data ", req.body)
-	let user = await UserFunctions.addCourse(req.cookies.AuthCookie,req.body.course)
-	console.log("\n\nAfter Updating : ", user);
-	res.redirect("/");
+	let user = await UserFunctions.addCourse(req.cookies.AuthCookie, req.body.course)
+	if(user == false){
+		res.render(__dirname + "/addACourse",{alreadyStudent:true});
+	} else {
+		//console.log("\n\nAfter Updating : ", user);
+		res.redirect("/");
+	}
 })
 
 app.get("/removeCourseForm", async (req, res) => {
