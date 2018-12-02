@@ -68,6 +68,7 @@ app.post("/login",async (req,res)=>{
 			if(req.body.username==usersFromDB[i].username) {
 				hashedPass = usersFromDB[i].hashedPassword;
 				userId = usersFromDB[i]._id;
+				break;
 			} else {
 				let hasErrors = true;
 				let errors = [];
