@@ -107,8 +107,19 @@ app.get("/signup",(req,res)=>{
 app.post("/signup",async(req,res)=>{
 	try {
 		console.log("\nEntered Information: ", req.body);
-		let createdUser = await UserFunctions.createUser(req.body.username,req.body.password, req.body.email,req.body.course);
-		console.log(createdUser);
+		const usersFromDB = await UserFunctions.getAllUsers();
+
+		for (let i = 0; i < usersFromDB.length; i++) {
+			if (req.body.username == usersFromDB[i].username) {
+				let hasErrors = true;
+				let errors = [];
+				errors.push("User already exists..!!");
+				res.status(400).render(__dirname + "/signup", { "hasErrors": hasErrors, "errors": errors });
+				return;
+			}
+		}
+		let createdUser = await UserFunctions.createUser(req.body.username, req.body.password, req.body.email, req.body.course);
+		//console.log(createdUser);
 		res.redirect("/");
 	} catch (error) {
 		console.log(error);
