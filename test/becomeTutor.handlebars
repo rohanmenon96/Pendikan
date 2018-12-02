@@ -42,5 +42,8 @@
         {{/each}}
         </ul>
   {{/if}}
+  {{#if alreadyStudent}}
+        <p class = "error">Cannot be a tutor as well as student in same subject..!!</p>
+    {{/if}}
 </body>
 </html>
