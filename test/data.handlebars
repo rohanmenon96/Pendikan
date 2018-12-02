@@ -1,78 +1,83 @@
 <html>
+
 <head>
-	<link rel="stylesheet" type="text/css" href="public/site.css">
-	<title>
-		Dashboard
-	</title>
+    <link rel="stylesheet" type="text/css" href="public/site.css">
+    <title>
+        Dashboard
+    </title>
 </head>
+
 <body>
-	<h1>
-        <div class= "title">Dashboard
+    <h1>
+        <div class="title">Dashboard
         </div>
     </h1>
     <br><br>
-    
+
     {{!-- Course Loading --}}
-        {{#each courses}}
-             <div class = "courseBox">
-                <p>
-                    <br>Name of the Course : {{ this }}
-                    <br>Enrolled As: Student
-                </p>
-                <form action="/addARequest" method="get">
-                        <input type="submit" value="Add Request">
-                        </form>
-                </div>
-        {{/each}}
+    {{#each courses}}
+    <div class="courseBox">
+        <p>
+            <br>Name of the Course : {{ this }}
+            <br>Enrolled As: Student
+        </p>
+        <form action="/addARequest" method="get">
+            <input type="submit" value="Add Request">
+        </form>
+    </div>
+    {{/each}}
 
     <form action="/viewActiveRequests" method="get">
-                <input type="submit" value="View My Student Requests">
-                </form>
+        <input type="submit" value="View My Student Requests">
+    </form>
     <form action="/addCourseForm" method="get">
-                <input type="submit" value="Add Course">
-                </form>
-
+        <input type="submit" value="Add Course">
+    </form>
+    <form action="/removeCourseForm" method="get">
+        <input type="submit" value="Remove Course">
+    </form>
     {{!-- Tutor Loading --}}
     {{#if isTutor}}
-        
-        {{#each tutorAt}}
-                <div class = "courseBox">
-                <p>
-                    <br>Name of the Course : {{ this }}
-                    <br>Enrolled As: Tutor
-                </p>
-                {{!-- Change this action --}}
-                <form action="/viewTutorRequests" method="post">
-                        <input type="hidden" name="course" value={{this}}>
-                        <input type="submit" value="View Tutor Requests">
-                </form>
-                </div>
-        {{/each}}
 
-        <form action="/myAcceptedRequests" method="post">
-                <input type="submit" value="My Accepted Requests">
-                </form>
-      {{/if}}
+    {{#each tutorAt}}
+    <div class="courseBox">
+        <p>
+            <br>Name of the Course : {{ this }}
+            <br>Enrolled As: Tutor
+        </p>
+        {{!-- Change this action --}}
+        <form action="/viewTutorRequests" method="post">
+            <input type="hidden" name="course" value={{this}}>
+            <input type="submit" value="View Tutor Requests">
+        </form>
+    </div>
+    {{/each}}
+
+    <form action="/myAcceptedRequests" method="post">
+        <input type="submit" value="My Accepted Requests">
+    </form>
+    {{/if}}
 
 
     <form action="/becomeATutor" method="get">
-    <input type="submit" value="Become A Tutor">
+        <input type="submit" value="Become A Tutor">
     </form>
     <br><br>
-    <div class = "logoutButton">
-                <form action="/logout" method="get">
-                <input type="submit" value="Logout">
-                </form>
-            </div>
+    <div class="logoutButton">
+        <form action="/logout" method="get">
+            <input type="submit" value="Logout">
+        </form>
+    </div>
     {{#if hasErrors}}
-        <ul class="error-list">
+    <ul class="error-list">
         {{#each errors}}
-            <li class= "error">
-                {{ this }}
-            </li>
+        <li class="error">
+            {{ this }}
+        </li>
         {{/each}}
-        </ul>
-  {{/if}}
-  
+    </ul>
+    {{/if}}
+
 </body>
+
 </html>
