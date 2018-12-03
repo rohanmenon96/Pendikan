@@ -163,6 +163,27 @@ module.exports = {
 			throw "could not update task successfully";
 	  	}
 		return await this.getUser(userID);
+	},
+	removeCourseAsTut: async function (userID, courseName) {
+
+		const UserCollection = await Users();
+		const user = await this.getUser(userID);
+		let courseArray = user.tutorAt;
+		let isremoved = false;
+		for (let course in courseArray) {
+			if (courseArray[course] == courseName) {
+				courseArray.splice(course, 1);
+				isremoved = true;
+			}
+		}
+		if (!isremoved) {
+			return "There is no course to remove with that name..!!";
+		}
+		const updateInfo = await UserCollection.updateOne({ _id: userID }, { $set: { "tutorAt": courseArray } });
+		if (updateInfo.modifiedCount === 0) {
+			throw "could not update task successfully";
+		}
+		return await this.getUser(userID);
 	}
 
 	// removeTask : async function(id) {
