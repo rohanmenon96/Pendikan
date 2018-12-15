@@ -7,12 +7,35 @@ const saltRounds = 16;
 
 module.exports = {
 
-	createReq: async function(reqObject){
+	createReq: async function (reqObject) {
 		reqObject._id = uuidv4();
+		//reqObject.acctedBy = [];
 		console.log("Coming inside createReq with data: \n", reqObject);
 		let RequestCollection = await Requests();
 		let insertInfo = await RequestCollection.insertOne(reqObject);
 		return insertInfo.insertedCount;
+	},
+
+	editReqAfterAccepted: async function(reqObject){
+		let requestCollection = await Requests();
+		let request = await requestCollection.find({_id:reqObject.requestId}).toArray();
+		console.log("Request::"+JSON.stringify(request));
+		if (request === null) throw "No request found";
+		console.log(typeof(request[0].acceptedBy));
+		request[0].acceptedBy.push(reqObject.acceptedBy);
+		let updateInfo = await requestCollection.updateOne({_id: reqObject.requestId},{ $set: { "acceptedBy": request[0].acceptedBy, 'acceptedAt': reqObject.acceptedAt } })
+		return updateInfo.updatedCount;
+	},
+
+	editReqAfterRejected: async function(reqObject){
+		let requestCollection = await Requests();
+		let request = await requestCollection.find({_id:reqObject.requestId}).toArray();
+		//console.log("Request::"+JSON.stringify(request));
+		if (request === null) throw "No request found";
+		//console.log(typeof(request[0].rejectedBy));
+		request[0].rejectedBy.push(reqObject.rejectedBy);
+		let updateInfo = await requestCollection.updateOne({_id: reqObject.requestId},{ $set: { "rejectedBy": request[0].rejectedBy, 'rejectedAt': reqObject.rejectedAt } })
+		return updateInfo.updatedCount;
 	},
 
 	getUser : async function(id) {
@@ -91,12 +114,36 @@ module.exports = {
 		return await RequestCollection.find({requestBy : userID}).toArray();
 	},
 
-	getActiveRequests: async function(courseName){
+	getActiveRequests: async function (courseName,tutId) {
 		const RequestCollection = await Requests();
-		let answer = await RequestCollection.find({$and: [{course: courseName},{status: "OPEN"}]}).toArray();
-		console.log("\n\nReturning Requests: \n\n", answer);
+		let answer = await RequestCollection.find({ $and: [{ course: courseName }, { status: "OPEN" }] }).toArray();
+		//console.log("\n\nReturning Requests: \n\n", answer);
+		console.log("tutId:"+tutId)
+		//console.log("tutId:"+typeof(tutId))
+		for(let request in answer){
+			accByArr = answer[request].acceptedBy;
+			for(let i in accByArr){	
+				if(accByArr[i] == tutId){
+					console.log("inIFaccccc:"+accByArr[i])
+					console.log("reNumber"+request);
+					answer.splice(request,1);
+				}
+			}
+		}
+		for(let req in answer){
+			rejByArr = answer[req].rejectedBy;
+			for(let i in rejByArr){	
+				if(rejByArr[i] == tutId){
+					console.log("inIFreeeeeee:"+rejByArr[i])
+					console.log("rejreqNum"+req);
+					answer.splice(req,1);
+				}
+			}
+		}
+		console.log(answer);
 		return answer;
 	},
+
 
 	addCourse: async function (userID, courseName) {
 		const UserCollection = await Users();
