@@ -1,0 +1,32 @@
+<html>
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<title>
+		View Request Page
+	</title>
+</head>
+<body>
+<h1>
+    View Your Request
+</h1>
+<main>
+       <ul>
+        {{#each requests}}
+            <li>
+                Topic: {{ topic }} <br>
+                Description: {{description}} <br>
+                Time of Meeting: {{time}} <br>
+                Location: {{location}} <br>
+                Posted On: {{postedAt}} <br>
+                Status: {{status}} <br>
+                Accepted by: {{acceptedBy}} <br>
+                Accepted On: {{acceptedAt}} <br>
+            </li>
+        {{/each}}
+        </ul>
+</main>
+<a href="/dashboard" method="get">Go Back to Dashboard</a>
+</body>
+
+</html>
