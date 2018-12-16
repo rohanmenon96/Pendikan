@@ -1,5 +1,6 @@
 <html>
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="public/site.css">
 	<title>
 		Add a Course Page
@@ -37,10 +38,9 @@
         {{/each}}
         </ul>
   {{/if}}
-  {{/if}}
     {{#if alreadyStudent}}
         <p class = 'error'>Course already added..!!</p>
-    	<p class="error">Either you are student or already a tutor in the selected subject..!!</p>
+        <p class="error">Either you are student or already a tutor in the selected subject..!!</p>
     {{/if}}
     <a href= "/dashboard" method= "get">Go Back to Dashboard</a>
 </body>
