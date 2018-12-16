@@ -1,5 +1,6 @@
 <html>
 <head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="public/site.css">
 	<title>
 		Active Requests Page
@@ -18,12 +19,9 @@
         <ul>
         {{#each requests}}
             <li>
-				Course : {{ course }}<br>
-                Topic : {{ topic }}<br> 
-				Preferred time of meet: {{ time }}<br>
-				Preferred location of meet: {{ location }}<br>
-				Status: {{ status }}<br>
-				Accepted By: {{ repliedBy.length }} Tutors<br><br>
+                {{ topic }} <form action="/viewRequestAsStudent" method="POST">
+				<button type="submit" id="viewRequest" name="viewRequest" value="{{this._id}}">View Request</button>
+				</form>
             </li>
         {{/each}}
         </ul>
