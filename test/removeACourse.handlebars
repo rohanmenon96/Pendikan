@@ -7,7 +7,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="public/css/site.css">
     <title>
-        Become A Tutor Page
+        Remove a Course Page
     </title>
 </head>
 
@@ -24,7 +24,6 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div>
-                <!-- /.navbar-static-side -->
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
@@ -37,40 +36,34 @@
                 </div>
             </nav>
         </div>
+
         <div id="page-wrapper"  class="activeRequest-h2">
-            <div>
-                <h1 class="activeRequest-h1"> BECOME A TUTOR</h1>
+            <h1 class="activeRequest-h1"> REMOVE A COURSE</h1>
+            <br>
+            <form id="removeCourse" action="/removeCourse" method="POST"  class="activeRequest-h2">
+                Enter Course you want to remove:
+                <select name="course">
+                    <option value="CS546">CS546 - Web Programming</option>
+                    <option value="CS511">CS511 - Concurrent Programming</option>
+                    <option value="CS570">CS570 - Intro to Algorithms</option>
+                    <option value="CS554">CS554 - Web Programming II</option>
+                </select>
                 <br>
-                <form id="tutor-form" action="/becomeATutor" method="POST"  class="activeRequest-h2">
-                    Enter Course for which you want to tutor:
-                    <select name="course">
-                        <option value="CS546">CS546 - Web Programming</option>
-                        <option value="CS511">CS511 - Concurrent Programming</option>
-                        <option value="CS570">CS570 - Intro to Algorithms</option>
-                        <option value="CS554">CS554 - Web Programming II</option>
-                    </select>
-                    <br>
-                    <label for="avatar">Please Upload your Transcript:</label>
-                    <input type="file"  class="activeRequest-h2" id="avatar" name="avatar" accept="image/png, image/jpeg,.pdf">
-                    <br>
-                    <br>
-                    <button type="submit">Become Tutor</button>
-                </form>
-            </div>
-            {{#if hasErrors}}
-            <ul class="error-list">
-                {{#each errors}}
-                <li class="error">
-                    {{ this }}
-                </li>
-                {{/each}}
-            </ul>
-            {{/if}} {{#if alreadyStudent}}
-            <p class="error">Cannot be a tutor in that course..!!</p>
-            <p class="error">Either you are student or already a tutor in the selected subject..!!</p>
-            {{/if}}
+                <br>
+                <button type="submit">Remove</button>
+            </form>
+        </div>
     </main>
-    </div>
+    {{#if hasErrors}}
+    <ul class="error-list">
+        {{#each errors}}
+        <li class="error">
+            {{ this }}
+        </li>
+        {{/each}}
+    </ul>
+    {{/if}}
+
 </body>
 
 </html>

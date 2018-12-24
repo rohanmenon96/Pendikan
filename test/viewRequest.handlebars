@@ -7,11 +7,12 @@
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="public/css/site.css">
     <title>
-        Become A Tutor Page
+        View Request Page
     </title>
 </head>
 
 <body>
+
     <main>
         <div id="wrapper">
             <!-- Navigation -->
@@ -23,6 +24,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <a class="navbar-brand" style="margin-left:45rem;font-size:30px" href="/dashboard">Pendikan</a>
                 </div>
                 <!-- /.navbar-static-side -->
                 <div class="navbar-default sidebar" role="navigation">
@@ -37,40 +39,18 @@
                 </div>
             </nav>
         </div>
-        <div id="page-wrapper"  class="activeRequest-h2">
+        <div class="viewRequest">
+            {{!--
+            <h1>View Request</h1> --}} {{#each requests}}
             <div>
-                <h1 class="activeRequest-h1"> BECOME A TUTOR</h1>
+                <b>Course:</b> {{ course }} <br> Topic: {{ topic }} <br> Description: {{description}} <br> Time of Meeting:
+                {{time}} <br> Location: {{location}}
+                <br> Posted On: {{postedAt}} <br> Status: {{status}} <br> Accepted by: {{acceptedBy}} <br> Accepted On: {{acceptedAt}}
                 <br>
-                <form id="tutor-form" action="/becomeATutor" method="POST"  class="activeRequest-h2">
-                    Enter Course for which you want to tutor:
-                    <select name="course">
-                        <option value="CS546">CS546 - Web Programming</option>
-                        <option value="CS511">CS511 - Concurrent Programming</option>
-                        <option value="CS570">CS570 - Intro to Algorithms</option>
-                        <option value="CS554">CS554 - Web Programming II</option>
-                    </select>
-                    <br>
-                    <label for="avatar">Please Upload your Transcript:</label>
-                    <input type="file"  class="activeRequest-h2" id="avatar" name="avatar" accept="image/png, image/jpeg,.pdf">
-                    <br>
-                    <br>
-                    <button type="submit">Become Tutor</button>
-                </form>
             </div>
-            {{#if hasErrors}}
-            <ul class="error-list">
-                {{#each errors}}
-                <li class="error">
-                    {{ this }}
-                </li>
-                {{/each}}
-            </ul>
-            {{/if}} {{#if alreadyStudent}}
-            <p class="error">Cannot be a tutor in that course..!!</p>
-            <p class="error">Either you are student or already a tutor in the selected subject..!!</p>
-            {{/if}}
+            {{/each}}
+        </div>
     </main>
-    </div>
 </body>
 
 </html>

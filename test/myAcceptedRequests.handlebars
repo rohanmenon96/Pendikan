@@ -1,32 +1,57 @@
 <html>
+
 <head>
-	<link rel="stylesheet" type="text/css" href="public/site.css">
-	<title>
-		Accepted Requests Page
-	</title>
+    <link rel="stylesheet" type="text/css" href="public/site.css">
+    <link rel='stylesheet' href='public/css/bootstrap.css' />
+    <!-- Custom Fonts -->
+    <link href="public/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <title>
+        Accepted Requests Page
+    </title>
 </head>
+
 <body>
-	<h1>
-	My Accepted Requests
-	</h1>
-	<main>
-		<p>
-			Accepted Requests:
-		</p>
-	</main>
-
-        <ul>
-        {{#each AcceptedRequests}}
-            <li>
-				Course : {{ course }}<br>
-                Topic : {{ topic }}<br> 
-				Preferred time of meet: {{ time }}<br>
-				Preferred location of meet: {{ location }}<br>
-				Status: {{ status }}<br><br>
-            </li>
-        {{/each}}
-        </ul>
-
-  <a href= "/dashboard" method= "get">Go Back to Dashboard</a>
+    <main>
+        <div id="wrapper">
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" style="margin-left:45rem;font-size:30px" href="/dashboard">Pendikan</a>
+                </div>
+                <!-- /.navbar-static-side -->
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="/dashboard"> Go Back to Dashboard</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.sidebar-collapse -->
+                </div>
+            </nav>
+        </div>
+        <div id="page-wrapper">
+            <p>
+                Accepted Requests:
+            </p>
+            <ul>
+                {{#each AcceptedRequests}}
+                <li>
+                    Course : {{ course }}<br> Topic : {{ topic }}<br> Preferred time of meet: {{ time }}<br> Preferred location
+                    of meet: {{ location }}<br> Status: {{ status }}<br><br>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </main>
+    {{!-- <a href="/dashboard" method="get">Go Back to Dashboard</a> --}}
 </body>
+
 </html>

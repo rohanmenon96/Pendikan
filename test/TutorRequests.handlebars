@@ -1,36 +1,72 @@
 <html>
+
 <head>
-	<link rel="stylesheet" type="text/css" href="public/site.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
+	 crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="public/css/site.css">
 	<title>
 		Active Tutor Requests Page
 	</title>
 </head>
+
 <body>
-	<h1>
-	Active Tutor Requests
-	</h1>
+
 	<main>
-		<p>
-			Active Requests:
-		</p>
-	</main>
+		<div id="wrapper">
+			<!-- Navigation -->
+			<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					
+				</div>
+				<!-- /.navbar-static-side -->
+				<div class="navbar-default sidebar" role="navigation">
+					<div class="sidebar-nav navbar-collapse">
+						<ul class="nav" id="side-menu">
+							<li>
+								<a href="/dashboard"> Go Back to Dashboard</a>
+							</li>
+						</ul>
+					</div>
+					<!-- /.sidebar-collapse -->
+				</div>
+			</nav>
+		</div>
+
+		<div id="page-wrapper">
+		<h1 class="activeRequest-h1">
+			Active Requests
+		</h1>
+		{{#if requests}}
 		<ul>
-        {{#each requests}}
-            <li>
-                Topic: {{ topic }}<br>
-				Description: {{ description }}<br>
-				Location: {{ location }}<br>
-				Time: {{ time }}<br>
-				Posted at: {{ postedAt }}
-				<form action="/tutorReply" method="post">
-				<input type="submit" name="action" value="Accept" />
-				<input type="submit" name="action" value="Reject" />
-				<input type="hidden" name="id" value = {{ _id }} >
-				</form>
-            </li>
-        {{/each}}
+			{{#each requests}}
+			<li>Topic: {{ topic }}<br> Location: {{ location }}<br> Time: {{ time }}<br> Posted at: {{ postedAt }}
+			</li><br>
+			<form action="/acceptedRequest" method="POST">
+				<button type="submit" id='requestId' name='requestId' value="{{this._id}}">Accept</button>
+			</form>
+			<form action="/rejectedRequest" method="POST">
+				<button type="submit" id='requestId' name='requestId' value="{{this._id}}">Reject</button>
+			</form>
+			{{/each}}
 		</ul>
-  <br><br>	
-  <a href= "/dashboard" method= "get">Go Back to Dashboard</a>
+		{{/if}}
+		{{#else}}
+		<h1 class="activeRequest-h1">
+			No Active Requests
+		</h1>
+		{{/else}}
+		</div>
+	</main>
+	<br><br>
+	<a href="/dashboard" method="get">Go Back to Dashboard</a>
 </body>
+
 </html>

@@ -1,46 +1,67 @@
 <html>
+
 <head>
-	<link rel="stylesheet" type="text/css" href="public/site.css">
-	<title>
-		Signup Page
-	</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="public/css/site.css">
+    <title>
+        Signup Page
+    </title>
 </head>
-<body>
-	<h1>
-	The Pendikan
-	</h1>
-	<main>
-		<p>
-			User will use this page to create a new User Id.
-		</p>
-        <div>
-		<form id= "signup-form" action="/signup" method="POST">
-            Enter new username
-            <input type="text" name="username" required><br>
-            Enter new password
-            <input type="password" name="password" required><br>
-            Enter your college email address
-            <input type="email" name="email" required><br>
-            Enter Atleast One Course:
-            <select name= "course">
-            <option value="CS546">CS546 - Web Programming</option>
-            <option value="CS511">CS511 - Concurrent Programming</option>
-            <option value="CS570">CS570 - Intro to Algorithms</option>
-            <option value="CS554">CS554 - Web Programming II</option>
-            </select>
-            <br>
-			<button type="submit">Sign Up</button>
-		</form>
+
+<body background="public/img/1.jpg">
+    <div class="myFormBody">
+        <div class="form-box">
+            <div class="form-top">
+                <div class="form-top-center">
+                    <h1 class="homepage-header">
+                        The Pendikan
+                    </h1>
+                </div>
+                <div class="form-top-divider"></div>
+            </div>
+            <main>
+                
+                <div>
+                    <form id="signup-form" class="registration-form" action="/signup" method="POST">
+                        <div class="form-group">
+                            <label class="sr-only" for="username">Enter new username</label>
+                            <input type="text" placeholder="Enter new username" class="form-first-name form-control" name="username" id = "username" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="password">Enter new password</label>
+                            <input type="password" placeholder="Enter new password" class="form-last-name form-control" name="password" id="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="email">Enter email</label>
+                            <input type="email" placeholder="Enter your college email address" class="form-last-name form-control" name="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class = "signup-course">Enter Atleast One Course : </label>
+                            <select name="course">
+                                <option value="CS546">CS546 - Web Programming</option>
+                                <option value="CS511">CS511 - Concurrent Programming</option>
+                                <option value="CS570">CS570 - Intro to Algorithms</option>
+                                <option value="CS554">CS554 - Web Programming II</option>
+                            </select>
+                        </div>
+                        <button class="btn" style="width:9rem" type="submit">Sign Up</button>
+                    </form>
+                </div>
+            </main>
+            {{#if hasErrors}}
+            <ul class="error-list">
+                {{#each errors}}
+                <li class="error">
+                    {{ this }}
+                </li>
+                {{/each}}
+            </ul>
+            {{/if}}
         </div>
-	</main>
-    {{#if hasErrors}}
-        <ul class="error-list">
-        {{#each errors}}
-            <li class= "error">
-                {{ this }}
-            </li>
-        {{/each}}
-        </ul>
-  {{/if}}
+        Already user?, <a href= "/" method= "get">Sign In</a>
+    </div>
 </body>
+
 </html>

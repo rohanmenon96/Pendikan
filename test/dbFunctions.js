@@ -7,135 +7,260 @@ const saltRounds = 16;
 
 module.exports = {
 
-	createReq: async function(reqObject){
+	createReq: async function (reqObject) {
 		reqObject._id = uuidv4();
-		console.log("Coming inside createReq with data: \n", reqObject);
+		//reqObject.acctedBy = [];
+		//console.log("Coming inside createReq with data: \n", reqObject);
 		let RequestCollection = await Requests();
 		let insertInfo = await RequestCollection.insertOne(reqObject);
 		return insertInfo.insertedCount;
 	},
 
-	getUser : async function(id) {
-	    if (!id) throw "You must provide an id to search for";
+	editReqAfterAccepted: async function (reqObject) {
+		let requestCollection = await Requests();
+		let request = await requestCollection.find({ _id: reqObject.requestId }).toArray();
+		//console.log("Request::" + JSON.stringify(request));
+		if (request === null) throw "No request found";
+		//console.log(typeof (request[0].acceptedBy));
+		request[0].acceptedBy.push(reqObject.acceptedBy);
+		let updateInfo = await requestCollection.updateOne({ _id: reqObject.requestId }, { $set: { "acceptedBy": request[0].acceptedBy, 'acceptedAt': reqObject.acceptedAt } })
+		return updateInfo.updatedCount;
+	},
 
-	    const UserCollection = await Users();
-	    const user = await UserCollection.findOne({ _id: id });
-	    if (user === null) throw "No user with that id";
+	editReqAfterRejected: async function (reqObject) {
+		let requestCollection = await Requests();
+		let request = await requestCollection.find({ _id: reqObject.requestId }).toArray();
+		//console.log("Request::"+JSON.stringify(request));
+		if (request === null) throw "No request found";
+		//console.log(typeof(request[0].rejectedBy));
+		request[0].rejectedBy.push(reqObject.rejectedBy);
+		let updateInfo = await requestCollection.updateOne({ _id: reqObject.requestId }, { $set: { "rejectedBy": request[0].rejectedBy, 'rejectedAt': reqObject.rejectedAt } })
+		return updateInfo.updatedCount;
+	},
+	getUser: async function (id) {
+		if (!id) throw "You must provide an id to search for";
 
-	    return user;
-  		},
+		const UserCollection = await Users();
+		const user = await UserCollection.findOne({ _id: id });
+		if (user === null) throw "No user with that id";
 
-	createUser : async function(username, password,email,course)
-		{
-			if (!username) throw "You must provide a Username";
+		return user;
+	},
 
-		    if (!password)
-		      throw "You must provide a password";
+	createUser: async function (username, password, email, course) {
+		if (!username) throw "You must provide a Username";
 
-		    const UserCollection = await Users();
-			const hashedPassword = await bcrypt.hash(password, saltRounds)
+		if (!password)
+			throw "You must provide a password";
 
-		    let newUser = {
-		        _id: uuidv4(),
-			    username: username,
-				password: password,
-				hashedPassword: hashedPassword,
-				email: email,
-				courses: [course],
-			    tutor: false,
-			   	tutorAt: []
-		    };
+		const UserCollection = await Users();
+		const hashedPassword = await bcrypt.hash(password, saltRounds)
 
-		    const insertInfo = await UserCollection.insertOne(newUser);
-		    if (insertInfo.insertedCount === 0) throw "Could not add user";
+		let newUser = {
+			_id: uuidv4(),
+			username: username,
+			password: password,
+			hashedPassword: hashedPassword,
+			email: email,
+			courses: [course],
+			tutor: false,
+			tutorAt: []
+		};
 
-		    const newId = insertInfo.insertedId;
+		const insertInfo = await UserCollection.insertOne(newUser);
+		if (insertInfo.insertedCount === 0) throw "Could not add user";
 
-		    const addedUser = await this.getUser(newId);
-		    return addedUser;
-		},
+		const newId = insertInfo.insertedId;
 
-	getAllUsers : async function (){
+		const addedUser = await this.getUser(newId);
+		return addedUser;
+	},
 
-		    const UserCollection = await Users();
+	getAllUsers: async function () {
 
-		    const users = await UserCollection.find({}).toArray();
-
-		    return users;
-
-
-		},
-
-	respondRequest: async function(tutorId,RequestId,action){
-
-		const RequestCollection = await Requests();
 		const UserCollection = await Users();
 
-		let data = await RequestCollection.findOne({_id: RequestId});
+		const users = await UserCollection.find({}).toArray();
 
-		let newRepBy = data.repliedBy;
-		newRepBy.push(tutorId);
-		let updateInfo = await RequestCollection.updateOne({_id : RequestId},{$set: {repliedBy : newRepBy}}); 
-
-		return await RequestCollection.findOne({_id: RequestId}); 
-
-	},
-	
-	myAcceptedRequests: async function(tutorID){
-		const RequestCollection = await Requests();
-		return await RequestCollection.find({repliedBy: tutorID}).toArray();
+		return users;
 	},
 
-	getMyRequests : async function(userID){
-		const RequestCollection = await Requests();
-		return await RequestCollection.find({requestBy : userID}).toArray();
+	getUserID: async function (name) {
+		//console.log(username)
+		const UserCollection = await Users();
+
+		const users = await UserCollection.find({username: name}).toArray();
+		//console.log(username)
+		return users[0]._id;
 	},
 
-	getActiveRequests: async function(courseName){
+	getMyRequests: async function (userID) {
 		const RequestCollection = await Requests();
-		let answer = await RequestCollection.find({$and: [{course: courseName},{status: "OPEN"}]}).toArray();
-		console.log("\n\nReturning Requests: \n\n", answer);
+		return await RequestCollection.find({ requestBy: userID }).toArray();
+	},
+
+	viewRequest: async function (requestID) {
+		const RequestCollection = await Requests();
+		let request = await RequestCollection.find({ _id: requestID }).toArray();
+		delete request.rejectedBy;
+		delete request.rejectedAt;
+		return request;
+	},
+
+	getActiveRequests: async function (courseName, tutId) {
+		const RequestCollection = await Requests();
+		let answer = await RequestCollection.find({ $and: [{ course: courseName }, { status: "OPEN" }] }).toArray();
+		//console.log("\n\nReturning Requests: \n\n", answer);
+		//console.log("tutId:" + tutId)
+		//console.log("tutId:"+typeof(tutId))
+		for (let request in answer) {
+			accByArr = answer[request].acceptedBy;
+			for (let i in accByArr) {
+				if (accByArr[i] == tutId) {
+					//console.log("inIFaccccc:" + accByArr[i])
+					//console.log("reNumber" + request);
+					answer.splice(request, 1);
+				}
+			}
+		}
+		for (let req in answer) {
+			rejByArr = answer[req].rejectedBy;
+			for (let i in rejByArr) {
+				if (rejByArr[i] == tutId) {
+					//console.log("inIFreeeeeee:" + rejByArr[i])
+					//console.log("rejreqNum" + req);
+					answer.splice(req, 1);
+				}
+			}
+		}
+		//console.log(answer);
 		return answer;
 	},
 
-	addCourse: async function(userID,courseName){
+	addCourse: async function (userID, courseName) {
+		if (!userID) throw "You must provide an user id to search for";
+
 		const UserCollection = await Users();
 		const user = await this.getUser(userID);
-		let courseArray = user.courses;
-		courseArray.push(courseName);
-		const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "courses": courseArray}});
-		if (updateInfo.modifiedCount === 0) {
-			throw "could not update task successfully";
-		  }
+		let courseArr = user.courses;
+		let tutCourseArr = user.tutorAt;
+		let isPresentTut = false;
+		for (let course in tutCourseArr) {
+			if (tutCourseArr[course] == courseName) {
+				isPresentTut = true;
+				break;
+			}
+		}
+
+		let isPresent = false;
+		for (let course in courseArr) {
+			if (courseArr[course] == courseName) {
+				isPresent = true;
+				break;
+			}
+		}
+		if (isPresent || isPresentTut) {
+			//console.log("if");
+			return false;
+		}
+		else {
+			//console.log("else")
+			let courseArray = user.courses;
+			courseArray.push(courseName);
+			//console.log("course" + courseArray);
+			//console.log("course" + typeof (courseArray));
+			//console.log("course" + typeof (user.courses));
+			await UserCollection.updateOne({ _id: userID }, { $set: { "courses": courseArray } });
+		}
+
+
 		return await this.getUser(userID);
 	},
 
-	becomeTutor : async function(userID,course) {
+	becomeTutor: async function (userID, courseName) {
 
-		    if (!userID) throw "You must provide an user id to search for";
+		if (!userID) throw "You must provide an user id to search for";
 
-		    const UserCollection = await Users();
-
-			const user = await this.getUser(userID);
-			let courseArray = user.tutorAt;
-			courseArray.push(course);
-
-		  	// let updatedTask = {
-		    //     //_id: taskId,
-			//     title: task.title,
-			//     description: task.description,
-			//     completed: true,
-			//     completedAt: true
-		    // };
-
-		    const updateInfo = await UserCollection.updateOne({ _id: userID }, {$set: { "tutor" : true, "tutorAt": courseArray}});
-		    if (updateInfo.modifiedCount === 0) {
-		      throw "could not update task successfully";
-		    }
-
-		    return await this.getUser(userID);
+		const UserCollection = await Users();
+		const user = await this.getUser(userID);
+		let courseArr = user.courses;
+		let tutCourseArr = user.tutorAt;
+		let isPresentTut = false;
+		for (let course in tutCourseArr) {
+			if (tutCourseArr[course] == courseName) {
+				isPresentTut = true;
+				break;
+			}
 		}
 
+		let isPresent = false;
+		for (let course in courseArr) {
+			if (courseArr[course] == courseName) {
+				isPresent = true;
+				break;
+			}
+		}
+		if (isPresent || isPresentTut) {
+			//console.log("if");
+			return false;
+		}
+		else {
+			//console.log("else")
+			let courseArray = user.tutorAt;
+			courseArray.push(courseName);
+			//console.log("course" + courseArray);
+			//console.log("course" + typeof (courseArray));
+			//console.log("course" + typeof (user.tutorAt));
+			await UserCollection.updateOne({ _id: userID }, { $set: { "tutor": true, "tutorAt": courseArray } });
+		}
+		return await this.getUser(userID);
+	},
+	myAcceptedRequests: async function(tutorID){
+		const RequestCollection = await Requests();
+		return await RequestCollection.find({acceptedBy: tutorID}).toArray();
+	},
+	removeCourse: async function (userID, courseName) {
+
+		const UserCollection = await Users();
+		const user = await this.getUser(userID);
+		let courseArray = user.courses;
+		let isremoved = false;
+		for (let course in courseArray) {
+			if (courseArray[course] == courseName) {
+				courseArray.splice(course, 1);
+				isremoved = true;
+			}
+		}
+		if (!isremoved) {
+			return "There is no course to remove with that name..!!";
+		}
+		const updateInfo = await UserCollection.updateOne({ _id: userID }, { $set: { "courses": courseArray } });
+		if (updateInfo.modifiedCount === 0) {
+			throw "could not update task successfully";
+		}
+		return await this.getUser(userID);
+	},
+	removeCourseAsTut: async function (userID, courseName) {
+
+		const UserCollection = await Users();
+		const user = await this.getUser(userID);
+		let courseArray = user.tutorAt;
+		let isremoved = false;
+		for (let course in courseArray) {
+			if (courseArray[course] == courseName) {
+				courseArray.splice(course, 1);
+				isremoved = true;
+			}
+		}
+		if (!isremoved) {
+			return "There is no course to remove with that name..!!";
+		}
+		const updateInfo = await UserCollection.updateOne({ _id: userID }, { $set: { "tutorAt": courseArray } });
+		if (updateInfo.modifiedCount === 0) {
+			throw "could not update task successfully";
+		}
+		return await this.getUser(userID);
+	}
 	// removeTask : async function(id) {
 	// 	    if (!id) throw "You must provide an id to search for to remove";
 

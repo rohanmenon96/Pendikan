@@ -1,41 +1,76 @@
 <html>
+
 <head>
-	<link rel="stylesheet" type="text/css" href="public/site.css">
-	<title>
-		Add a Course Page
-	</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="public/css/site.css">
+    <title>
+        Add a Course Page
+    </title>
 </head>
+
 <body>
-	<h1>
-	Add A Course
-	</h1>
-	<main>
-		<p>
-			User will use this page to add a course.
-		</p>
-        <div>
-		<form id= "addCourse-form" action="/addACourse" method="POST">
-            Enter Course you want to add:
-            <select name= "course">
-            <option value="CS546">CS546 - Web Programming</option>
-            <option value="CS511">CS511 - Concurrent Programming</option>
-            <option value="CS570">CS570 - Intro to Algorithms</option>
-            <option value="CS554">CS554 - Web Programming II</option>
-            </select>
-            <br>
-            <br>
-			<button type="submit">Add</button>
-		</form>
+    <main>
+        <div id="wrapper">
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="/dashboard"> Go Back to Dashboard</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.sidebar-collapse -->
+                </div>
+            </nav>
         </div>
-	</main>
-    {{#if hasErrors}}
-        <ul class="error-list">
-        {{#each errors}}
-            <li class= "error">
-                {{ this }}
-            </li>
-        {{/each}}
-        </ul>
-  {{/if}}
+        <div id="page-wrapper">
+            <!-- <p>
+			User will use this page to add a course.
+		</p> -->
+            <div class="activeRequest-h2">
+                <h1 class="activeRequest-h1"> ADD A COURSE</h1>
+                <br>
+                <form id="addCourse-form" action="/addACourse" method="POST" class="activeRequest-h2">
+                    Enter Course you want to add:
+                    <select name="course">
+                        <option value="CS546">CS546 - Web Programming</option>
+                        <option value="CS511">CS511 - Concurrent Programming</option>
+                        <option value="CS570">CS570 - Intro to Algorithms</option>
+                        <option value="CS554">CS554 - Web Programming II</option>
+                    </select>
+                    <br>
+                    <br>
+                    <button type="submit">Add</button>
+                </form>
+            </div>
+            {{#if hasErrors}}
+            <ul class="error-list">
+                {{#each errors}}
+                <li class="error">
+                    {{ this }}
+                </li>
+                {{/each}}
+            </ul>
+            {{/if}} {{#if alreadyStudent}}
+            <p class='error'>Course already added..!!</p>
+            <p class="error">Either you are student or already a tutor in the selected subject..!!</p>
+            {{/if}}
+
+    </main>
+
 </body>
+
 </html>

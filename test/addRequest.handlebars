@@ -1,53 +1,94 @@
 <html>
+
 <head>
-	<link rel="stylesheet" type="text/css" href="public/site.css">
-	<title>
-		Add A Request Page
-	</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="public/css/site.css">
+    <title>
+        Add A Request Page
+    </title>
 </head>
+
 <body>
-	<h1>
-	Add A Request
-	</h1>
-	<main>
-		<p>
-			User will use this page to create a new Tutor request.
-		</p>
-        <div>
-		<form id= "request-form" action="/addARequest" method="POST">
-            Enter Course
-            <select name= "course">
-            <option value="CS546">CS546</option>
-            <option value="CS554">CS554</option>
-            <option value="CS511">CS511</option>
-            <option value="CS570">CS570</option>
-            </select><br>
-            Enter Topic
-            <input type="text" name="topic" required><br>
-            Enter Description
-            <input type="text" name="description" required><br>
-            Enter Date and Time
-            <input type="datetime-local" name="time" required><br>
-            Enter Location
-            <select name= "location">
-            <option value="Library">Library</option>
-            <option value="Howe Center">Howe Center</option>
-            <option value="Babio">Babio</option>
-            <option value="NorthBuilding">North Building</option>
-            </select>
-            <br>
-			<button type="submit">Create Request</button>
-		</form>
+    <br>
+    <h1 class="activeRequest-h1">
+        Add A Request
+    </h1>
+    <main>
+        <div id="wrapper">
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- /.navbar-header -->
+
+                <!-- /.navbar-top-links -->
+                <!-- 左边导航 -->
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="/dashboard"> Go Back to Dashboard</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.sidebar-collapse -->
+                </div>
+
+            </nav>
         </div>
-	</main>
+        {{!--
+        <p>
+            User will use this page to create a new Tutor request.
+        </p> --}}
+        <div id="page-wrapper">
+            <div>
+                <br>
+                <form id="request-form" action="/addARequest" method="POST" class="addReq-form">
+                    Enter Course:
+                    <select name="course">
+                        <option value="CS546">CS546</option>
+                        <option value="CS554">CS554</option>
+                        <option value="CS511">CS511</option>
+                        <option value="CS570">CS570</option>
+                    </select><br><br>
+
+                    <label for="topic">Enter Topic:</label>
+                    <input type="text" name="topic" id="topic" required><br><br>
+                    <label for="description">Enter Description:</label>
+                    <input type="text" name="description" id="description" required><br><br>
+                    <label for="time">Enter Date and Time:</label>
+                    <input type="datetime-local" name="time" id="time" required><br><br>
+                    <label for="location">Enter Location:</label>
+                    <select name="location" id="location">
+                        <option value="Library">Library</option>
+                        <option value="Howe Center">Howe Center</option>
+                        <option value="Babio">Babio</option>
+                        <option value="NorthBuilding">North Building</option>
+                    </select>
+                    <br><br>
+                    <button type="submit">Create Request</button>
+                </form>
+            </div>
+    </main>
     {{#if hasErrors}}
-        <ul class="error-list">
+    <ul class="error-list">
         {{#each errors}}
-            <li class= "error">
-                {{ this }}
-            </li>
+        <li class="error">
+            {{ this }}
+        </li>
         {{/each}}
-        </ul>
-  {{/if}}
+    </ul>
+    {{/if}}
+    <a href="/dashboard" method="get">Go Back to Dashboard</a>
 </body>
+
 </html>
